@@ -13,3 +13,6 @@
 
 Route::get('/','PagesController@root')->name('root');
 Auth::routes();
+
+//验证
+Auth::routes(['verify' => true]);
