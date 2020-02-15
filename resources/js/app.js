@@ -26,7 +26,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+//引入选择日期插件
+require('./components/SelectDistrict');
+require('./components/UserAddressesCreateAndEdit');
 const app = new Vue({
     el: '#app',
 });

@@ -20,4 +20,9 @@ Auth::routes(['verify' => true]);
 //收货地址  auth 中间件代表需要登录，verified中间件代表需要经过邮箱验证
 Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
+    //添加收货地址页面
+	Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
+	//提交收货地址表单
+	Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
 });
+
