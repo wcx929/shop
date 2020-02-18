@@ -21,6 +21,13 @@
             </tr>
             </thead>
             <tbody>
+            @if(!count($addresses))
+                  <td class="text-center" colspan="5">
+                      <a class="btn btn-primary" href="{{ route('user_addresses.create')}}">
+                  还没有收货地址请添加收货地址哦！
+                      </a>
+                  </td>
+           @else 
             @foreach($addresses as $address)
               <tr>
                 <td>{{ $address->contact_name }}</td>
@@ -34,6 +41,7 @@
                 </td>
               </tr>
             @endforeach
+            @endif
             </tbody>
           </table>
         </div>
