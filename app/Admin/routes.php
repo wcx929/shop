@@ -17,5 +17,8 @@ Route::group([
     //创建商品
     $router->get('products/create', 'ProductsController@create');
     $router->post('products', 'ProductsController@store');
+    //编辑视频
+    $router->get('products/{id}/edit', 'ProductsController@edit');
+    $router->put('products/{id}', 'ProductsController@update');
 
 });
