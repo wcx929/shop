@@ -21,6 +21,11 @@ class Product extends Model
         return $this->hasMany(ProductSku::class);
     }
 
+    // 与赠品加购关联
+    public function fills()
+    {
+        return $this->hasMany(ProductFill::class);
+    }
     //输出图片绝对路径
     public function getImageUrlAttribute()
     {
@@ -29,5 +34,45 @@ class Product extends Model
             return $this->attributes['image'];
         }
         return \Storage::disk('public')->url($this->attributes['image']);
+    }
+
+    public function setPicturesAttribute($pictures)
+    {
+        if (is_array($pictures)) {
+            $this->attributes['pictures'] = json_encode($pictures);
+        }
+    }
+
+    public function getPicturesAttribute($pictures)
+    {
+        return json_decode($pictures, true);
+    }
+
+    //加购
+    public function test()
+    {
+        return $this->belongsToMany(ProductFill::class,"fills_product","product_id","fill_id");
+    }
+
+    //收花日期
+    public function getWeekdayAttribute($value)
+    {
+        return explode(',', $value);
+    }
+    public function setWeekdayAttribute($value)
+    {
+        //tags 是分类字段名 我的叫tags
+        $this->attributes['weekday'] = implode(',', $value);
+    }
+
+    //收花地区
+    public function getSaleregionAttribute($value)
+    {
+        return explode(',', $value);
+    }
+    public function setSaleregionAttribute($value)
+    {
+        //tags 是分类字段名 我的叫tags
+        $this->attributes['saleregion'] = implode(',', $value);
     }
 }

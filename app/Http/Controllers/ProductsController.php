@@ -59,7 +59,6 @@ class ProductsController extends Controller
             // boolval() 函数用于把值转为布尔值
             $favored = boolval($user->favoriteProducts()->find($product->id));
         }
-
         return view('products.show', ['product' => $product, 'favored' => $favored]);
     }
 
@@ -83,5 +82,12 @@ class ProductsController extends Controller
         $user->favoriteProducts()->detach($product);
 
         return [];
+    }
+    //收藏列表
+    public function favorites(Request $request)
+    {
+        $products = $request->user()->favoriteProducts()->paginate(16);
+
+        return view('products.favorites', ['products' => $products]);
     }
 }
