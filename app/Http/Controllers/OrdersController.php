@@ -55,7 +55,6 @@ class OrdersController extends Controller
             foreach ($items as $data) {
 
                 $sku  = ProductSku::find($data['sku_id']);
-                $totalAmount += $sku->price * $data['amount'];
 			    if ($sku->decreaseStock($data['amount']) <= 0) {
 			        throw new InvalidRequestException('该商品库存不足');
 			    }
@@ -82,5 +81,11 @@ class OrdersController extends Controller
         });
         $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
         return $order;
+    }
+
+    public function show(Order $order, Request $request)
+    {
+        $this->authorize('own', $order);
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 }
