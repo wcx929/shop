@@ -41,6 +41,7 @@ class OrderService
                 $item = $order->items()->make([
                     'amount' => $data['amount'],
                     'price'  => $sku->price,
+                    'gtype' => 1,
                 ]);
                 $item->product()->associate($sku->product_id);
                 $item->productSku()->associate($sku);
