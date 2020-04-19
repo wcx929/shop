@@ -412,11 +412,11 @@ body {
     }
   }
 
-  .payment-buttons .receive-button {
+  .payment-buttons, .receive-button, .refund-button {
     margin-top: 10px;
     padding-right: 10px;
   }
-
+  
 }
 
 //商品评价
