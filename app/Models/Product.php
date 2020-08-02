@@ -75,4 +75,11 @@ class Product extends Model
         //tags 是分类字段名 我的叫tags
         $this->attributes['saleregion'] = implode(',', $value);
     }
+
+
+    //分类模型关联
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
