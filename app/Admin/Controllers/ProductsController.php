@@ -97,6 +97,7 @@ class ProductsController extends AdminController
         $form->image('image', '封面图片')->rules('required|image');
 
         $form->multipleImage('pictures', '轮播图片')->sortable()->removable();
+        
         $data = ProductFill::query()->where('on_sale', true)->pluck('title', 'id');
         $form->multipleSelect('test', '加购')->options($data);
         

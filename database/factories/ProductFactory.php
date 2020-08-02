@@ -18,7 +18,9 @@ $factory->define(Product::class, function (Faker $faker) {
         "https://cdn.learnku.com/uploads/images/201806/01/5320/2JMRaFwRpo.jpg",
         "https://cdn.learnku.com/uploads/images/201806/01/5320/pa7DrV43Mw.jpg",
     ]);
-
+    $pictures[] = $image;
+    $weekday = [1,6];
+    $saleregion = [1,2];
     return [
         'title'        => $faker->word,
         'description'  => $faker->sentence,
@@ -28,5 +30,9 @@ $factory->define(Product::class, function (Faker $faker) {
         'sold_count'   => 0,
         'review_count' => 0,
         'price'        => 0,
+        'gtype'        =>random_int(0, 1),
+        'weekday'      =>$weekday,
+        'saleregion'   =>$saleregion,
+        'pictures'     =>$pictures
     ];
 });

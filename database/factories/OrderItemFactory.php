@@ -19,5 +19,6 @@ $factory->define(OrderItem::class, function (Faker $faker) {
         'reviewed_at'    => null,
         'product_id'     => $product->id,
         'product_sku_id' => $sku->id,
+        'gtype'         => random_int(0, 1),
     ];
 });

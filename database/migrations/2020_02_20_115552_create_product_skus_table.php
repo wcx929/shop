@@ -17,9 +17,13 @@ class CreateProductSkusTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('description');
+            $table->string('spec');
             $table->decimal('price', 10, 2);
+            $table->string('spec_img');
+            $table->unsignedInteger('times');
             $table->unsignedInteger('stock');
             $table->unsignedBigInteger('product_id');
+            $table->boolean('on_sale')->default(true);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });

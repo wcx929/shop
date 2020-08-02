@@ -23,6 +23,10 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('sold_count')->default(0);
             $table->unsignedInteger('review_count')->default(0);
             $table->decimal('price', 10, 2);
+            $table->unsignedInteger('gtype')->default(0);
+            $table->string('weekday')->default(0);
+            $table->string('saleregion')->default(0);
+            $table->text('pictures');
             $table->timestamps();
         });
     }

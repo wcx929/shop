@@ -20,6 +20,7 @@ class CreateProductFillsTable extends Migration
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('stock');
             $table->string('image');
+            $table->boolean('on_sale')->default(true);
             $table->timestamps();
         });
     }
