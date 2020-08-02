@@ -21,6 +21,8 @@ $factory->define(Product::class, function (Faker $faker) {
     $pictures[] = $image;
     $weekday = [1,6];
     $saleregion = [1,2];
+    // 从数据库中随机取一个类目
+    $category = \App\Models\Category::query()->where('is_directory', false)->inRandomOrder()->first();
     return [
         'title'        => $faker->word,
         'description'  => $faker->sentence,
@@ -33,6 +35,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'gtype'        =>random_int(0, 1),
         'weekday'      =>$weekday,
         'saleregion'   =>$saleregion,
-        'pictures'     =>$pictures
+        'pictures'     =>$pictures,
+        'category_id'  => $category ? $category->id : null,
     ];
 });
