@@ -1,41 +1,58 @@
 <?php
-namespace App\Listeners;
 
-use App\Events\OrderPaid;
-use App\Models\Order;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace App\Providers;
 
-class UpdateCrowdfundingProductProgress implements ShouldQueue
+use Illuminate\Support\ServiceProvider;
+use Monolog\Logger;
+use Yansongda\Pay\Pay;
+
+class AppServiceProvider extends ServiceProvider
 {
-    public function handle(OrderPaid $event)
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
     {
-        $order = $event->getOrder();
-        // 如果订单类型不是众筹商品订单，无需处理
-        if ($order->type !== Order::TYPE_CROWDFUNDING) {
-            return;
-        }
-        $crowdfunding = $order->items[0]->product->crowdfunding;
+        // 往服务容器中注入一个名为 alipay 的单例对象
+        $this->app->singleton('alipay', function () {
+            $config               = config('pay.alipay');
+            //$config['notify_url'] = 'http://requestbin.net/r/10xnfo71';/*route('payment.alipay.notify');*/
+            $config['notify_url'] = ngrok_url('payment.alipay.notify');
+            $config['return_url'] = route('payment.alipay.return');
+            // 判断当前项目运行环境是否为线上环境
+            if (app()->environment() !== 'production') {
+                $config['mode']         = 'dev';
+                $config['log']['level'] = Logger::DEBUG;
+            } else {
+                $config['log']['level'] = Logger::WARNING;
+            }
+            // 调用 Yansongda\Pay 来创建一个支付宝支付对象
+            return Pay::alipay($config);
+        });
 
-        $data = Order::query()
-            // 查出订单类型为众筹订单
-            ->where('type', Order::TYPE_CROWDFUNDING)
-            // 并且是已支付的
-            ->whereNotNull('paid_at')
-            ->whereHas('items', function ($query) use ($crowdfunding) {
-                // 并且包含了本商品
-                $query->where('product_id', $crowdfunding->product_id); 
-            })
-            ->first([
-                // 取出订单总金额
-                \DB::raw('sum(total_amount) as total_amount'),
-                // 取出去重的支持用户数
-                \DB::raw('count(distinct(user_id)) as user_count'),
-            ]);
-
-        $crowdfunding->update([
-            'total_amount' => $data->total_amount,
-            'user_count'   => $data->user_count,
-        ]);
+        $this->app->singleton('wechat_pay', function () {
+            $config = config('pay.wechat');
+            $config['notify_url'] = ngrok_url('payment.wechat.notify');
+            if (app()->environment() !== 'production') {
+                $config['log']['level'] = Logger::DEBUG;
+            } else {
+                $config['log']['level'] = Logger::WARNING;
+            }
+            // 调用 Yansongda\Pay 来创建一个微信支付对象
+            return Pay::wechat($config);
+        });
+    }
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        // 当 Laravel 渲染 products.index 和 products.show 模板时，就会使用 CategoryTreeComposer 这个来注入类目树变量
+        // 同时 Laravel 还支持通配符，例如 products.* 即代表当渲染 products 目录下的模板时都执行这个 ViewComposer
+        \View::composer(['products.index', 'products.show'], \App\Http\ViewComposers\CategoryTreeComposer::class);
     }
 }
