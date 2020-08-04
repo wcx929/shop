@@ -79,6 +79,12 @@ abstract class CommonProductsController extends AdminController
             $form->text('times', '配送次数')->rules('required|numeric|min:1');
             $form->image('spec_img', 'SKU 图片');
         });
+
+        // 放在 SKU 下面
+        $form->hasMany('properties', '商品属性', function (Form\NestedForm $form) {
+            $form->text('name', '属性名')->rules('required');
+            $form->text('value', '属性值')->rules('required');
+        });
         $form->saving(function (Form $form) {
             $form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
         });
