@@ -30,6 +30,7 @@ class PaymentController extends Controller
     // 前端回调页面
     public function alipayReturn()
     {
+        //此处有问题 不知道为什么前端回调一直失败 #TODO
         try {
             $data = app('alipay')->verify();
         } catch (\Exception $e) {
