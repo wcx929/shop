@@ -110,7 +110,9 @@ class Migrate extends Command
             'body'  => [
                 'settings' => $indexClass::getSettings(),
                 'mappings' => [
-                    'properties' => $indexClass::getProperties(),
+                    '_doc' => [
+                        'properties' => $indexClass::getProperties(),
+                    ],
                 ],
             ],
         ]);
