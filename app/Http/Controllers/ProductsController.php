@@ -42,6 +42,7 @@ class ProductsController extends Controller
                 $params['body']['query']['bool']['filter'][] = ['term' => ['category_id' => $category->id]];
             }
         }
+        
         // 是否有提交 order 参数，如果有就赋值给 $order 变量
         // order 参数用来控制商品的排序规则
         if ($order = $request->input('order', '')) {
@@ -122,8 +123,8 @@ class ProductsController extends Controller
                         // 指明 nested 字段
                         'path'  => 'properties',
                         'query' => [
-                            ['term' => ['properties.name' => $name]],
-                            ['term' => ['properties.value' => $value]],
+                            // 将原来的两个 term 查询改成一个
+                            ['term' => ['properties.search_value' => $filter]],
                         ],
                     ],
                 ];
