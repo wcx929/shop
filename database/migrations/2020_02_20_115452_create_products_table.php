@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('gtype')->default(0);
             $table->string('weekday')->default(0);
             $table->string('saleregion')->default(0);
-            $table->text('pictures');
+            $table->text('pictures')->nullable();
             $table->timestamps();
         });
     }

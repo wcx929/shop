@@ -17,10 +17,10 @@ class CreateProductSkusTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('description');
-            $table->string('spec');
+            $table->string('spec')->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('spec_img');
-            $table->unsignedInteger('times');
+            $table->string('spec_img')->nullable();
+            $table->unsignedInteger('times')->nullable();
             $table->unsignedInteger('stock');
             $table->unsignedBigInteger('product_id');
             $table->boolean('on_sale')->default(true);
