@@ -81,6 +81,7 @@ class ProductsController extends Controller
         // 通过 whereIn 方法从数据库中读取商品数据
         $products = Product::query()->byIds($productIds)->get();
         // 返回一个 LengthAwarePaginator 对象
+        dd($result);
         if(!empty($result)){
             $pager = new LengthAwarePaginator($products, $result['hits']['total']['value'], $perPage, $page, [
                 'path' => route('products.index', false), // 手动构建分页的 url
