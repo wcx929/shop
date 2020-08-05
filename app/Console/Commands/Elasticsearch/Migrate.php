@@ -55,8 +55,10 @@ class Migrate extends Command
                 // 调用索引类的 getSettings() 方法获取索引设置
                 'settings' => $indexClass::getSettings(),
                 'mappings' => [
-                    // 调用索引类的 getProperties() 方法获取索引字段
-                    'properties' => $indexClass::getProperties(),
+                    '_doc' => [
+                        // 调用索引类的 getProperties() 方法获取索引字段
+                        'properties' => $indexClass::getProperties(),
+                    ],
                 ],
                 'aliases'  => [
                     // 同时创建别名
@@ -79,7 +81,9 @@ class Migrate extends Command
         $this->es->indices()->putMapping([
             'index' => $aliasName,
             'body'  => [
-                'properties' => $indexClass::getProperties(),
+                '_doc' => [
+                    'properties' => $indexClass::getProperties(),
+                ],
             ],
         ]);
         // 重新打开索引
