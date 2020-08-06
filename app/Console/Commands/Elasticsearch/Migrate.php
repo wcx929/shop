@@ -17,7 +17,7 @@ class Migrate extends Command
     public function handle()
     {
         $this->es = app('es');
-        // 索引类数组
+        // 索引类数组，先留空
         $indices = [Indices\ProjectIndex::class];
         // 遍历索引类数组
         foreach ($indices as $indexClass) {
@@ -45,6 +45,7 @@ class Migrate extends Command
         }
     }
 
+    // 创建新索引
     protected function createIndex($aliasName, $indexClass)
     {
         // 调用 create() 方法创建索引
@@ -55,10 +56,7 @@ class Migrate extends Command
                 // 调用索引类的 getSettings() 方法获取索引设置
                 'settings' => $indexClass::getSettings(),
                 'mappings' => [
-                    '_doc' => [
-                        // 调用索引类的 getProperties() 方法获取索引字段
-                        'properties' => $indexClass::getProperties(),
-                    ],
+                    'properties' => $indexClass::getProperties(),
                 ],
                 'aliases'  => [
                     // 同时创建别名
@@ -68,6 +66,7 @@ class Migrate extends Command
         ]);
     }
 
+    // 更新已有索引
     protected function updateIndex($aliasName, $indexClass)
     {
         // 暂时关闭索引
@@ -81,15 +80,14 @@ class Migrate extends Command
         $this->es->indices()->putMapping([
             'index' => $aliasName,
             'body'  => [
-                '_doc' => [
-                    'properties' => $indexClass::getProperties(),
-                ],
+                'properties' => $indexClass::getProperties(),
             ],
         ]);
         // 重新打开索引
         $this->es->indices()->open(['index' => $aliasName]);
     }
 
+    // 重建索引
     protected function reCreateIndex($aliasName, $indexClass)
     {
         // 获取索引信息，返回结构的 key 为索引名称，value 为别名
@@ -110,9 +108,7 @@ class Migrate extends Command
             'body'  => [
                 'settings' => $indexClass::getSettings(),
                 'mappings' => [
-                    '_doc' => [
-                        'properties' => $indexClass::getProperties(),
-                    ],
+                    'properties' => $indexClass::getProperties(),
                 ],
             ],
         ]);
