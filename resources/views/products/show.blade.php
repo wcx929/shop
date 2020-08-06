@@ -91,6 +91,20 @@
             @else
               <a class="btn btn-primary" href="{{ route('login') }}">请先登录</a>
             @endif
+            <!-- 秒杀商品下单按钮开始 -->
+          @elseif($product->type === \App\Models\Product::TYPE_SECKILL)
+            @if(Auth::check())
+              @if($product->seckill->is_before_start)
+                <button class="btn btn-primary btn-seckill disabled countdown">抢购倒计时</button>
+              @elseif($product->seckill->is_after_end)
+                <button class="btn btn-primary btn-seckill disabled">抢购已结束</button>
+              @else
+                <button class="btn btn-primary btn-seckill">立即抢购</button>
+              @endif
+            @else
+              <a class="btn btn-primary" href="{{ route('login') }}">请先登录</a>
+            @endif
+          <!-- 秒杀商品下单按钮结束 -->
           @else
             <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
           @endif

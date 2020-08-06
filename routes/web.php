@@ -59,6 +59,9 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     //众筹
     Route::post('crowdfunding_orders', 'OrdersController@crowdfunding')->name('crowdfunding_orders.store');
+
+    //秒杀
+    Route::post('seckill_orders', 'OrdersController@seckill')->name('seckill_orders.store');
 });
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
