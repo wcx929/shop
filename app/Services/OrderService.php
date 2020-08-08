@@ -214,6 +214,7 @@ class OrderService
                 'amount' => 1, // 秒杀商品只能一份
                 'price'  => $sku->price,
             ]);
+            $item->gtype = 1;
             $item->product()->associate($sku->product_id);
             $item->productSku()->associate($sku);
             $item->save();
