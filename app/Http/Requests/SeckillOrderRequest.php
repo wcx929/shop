@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Requests;
 
+use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductSku;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Auth\AuthenticationException;
-use App\Exceptions\InvalidRequestException;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\Rule;
 
 class SeckillOrderRequest extends Request
 {
@@ -45,7 +45,6 @@ class SeckillOrderRequest extends Request
                     if ($sku->product->seckill->is_after_end) {
                         return $fail('秒杀已经结束');
                     }
-
                     if (!$user = \Auth::user()) {
                         throw new AuthenticationException('请先登录');
                     }
