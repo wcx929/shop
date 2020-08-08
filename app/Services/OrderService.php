@@ -10,6 +10,7 @@ use App\Exceptions\InvalidRequestException;
 use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InternalException;
 use App\Jobs\CloseOrder;
+use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
 class OrderService
@@ -217,6 +218,7 @@ class OrderService
             $item->productSku()->associate($sku);
             $item->save();
 
+            Redis::decr('seckill_sku_'.$sku->id);
             return $order;
         });
         // 秒杀订单的自动关闭时间与普通订单不同
