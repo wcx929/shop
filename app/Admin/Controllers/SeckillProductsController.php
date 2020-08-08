@@ -25,7 +25,14 @@ class SeckillProductsController extends CommonProductsController
         $grid->column('seckill.start_at', '开始时间');
         $grid->column('seckill.end_at', '结束时间');
         $grid->sold_count('销量');
-         // 当商品表单保存完毕时触发
+    }
+
+    protected function customForm(Form $form)
+    {
+        // 秒杀相关字段
+        $form->datetime('seckill.start_at', '秒杀开始时间')->rules('required|date');
+        $form->datetime('seckill.end_at', '秒杀结束时间')->rules('required|date');
+        // 当商品表单保存完毕时触发
         $form->saved(function (Form $form) {
             $product = $form->model();
             // 商品重新加载秒杀和 SKU 字段
@@ -44,12 +51,5 @@ class SeckillProductsController extends CommonProductsController
                 }
             });
         });
-    }
-
-    protected function customForm(Form $form)
-    {
-        // 秒杀相关字段
-        $form->datetime('seckill.start_at', '秒杀开始时间')->rules('required|date');
-        $form->datetime('seckill.end_at', '秒杀结束时间')->rules('required|date');
     }
 }
