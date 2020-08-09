@@ -12,6 +12,8 @@
         "elasticsearch/elasticsearch": "~7.0",
         "encore/laravel-admin": "1.7.7",
         "fideloper/proxy": "^4.0",
+        "jacobcyl/ali-oss-storage": "^2.1",
+        "johnlui/aliyun-oss": "~2.0",
         "jxlwqq/quill": "^1.0",
         "laravel/framework": "^6.2",
         "laravel/horizon": "^3.7.2",
